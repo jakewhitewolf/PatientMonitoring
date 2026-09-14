@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.patientmonitoring.client.controller.MainViewController"
+            stylesheets="@../styles/dark-theme.css"
+            styleClass="app-root">
+
+    <left>
+        <VBox spacing="18" prefWidth="260" styleClass="sidebar">
+            <padding>
+                <Insets top="28" right="20" bottom="28" left="20"/>
+            </padding>
+
+            <VBox spacing="4">
+                <Label text="Patient Monitor" styleClass="app-title"/>
+                <Label text="Дистанционный контроль пациентов" styleClass="app-subtitle"/>
+            </VBox>
+
+            <Separator styleClass="dark-separator"/>
+
+            <VBox spacing="10">
+                <Button text="Пациенты" maxWidth="Infinity" styleClass="sidebar-button"/>
+                <Button text="Показатели" maxWidth="Infinity" styleClass="sidebar-button"/>
+                <Button text="Предупреждения" maxWidth="Infinity" styleClass="sidebar-button"/>
+            </VBox>
+
+            <Pane VBox.vgrow="ALWAYS"/>
+
+            <VBox spacing="6" styleClass="server-card">
+                <Label text="Статус сервера" styleClass="small-label"/>
+                <Label fx:id="serverStatusLabel" text="localhost:8080" styleClass="status-online"/>
+            </VBox>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox spacing="18" styleClass="content">
+            <padding>
+                <Insets top="24" right="28" bottom="24" left="28"/>
+            </padding>
+
+            <HBox spacing="14" alignment="CENTER_LEFT">
+                <VBox spacing="4">
+                    <Label text="Система контроля состояния пациентов" styleClass="page-title"/>
+                    <Label text="Просмотр пациентов, добавление медицинских показателей и обработка тревожных уведомлений"
+                           styleClass="page-description"/>
+                </VBox>
+
+                <Pane HBox.hgrow="ALWAYS"/>
+
+                <Button text="Обновить данные" onAction="#refreshAllData" styleClass="primary-button"/>
+            </HBox>
+
+            <TabPane tabClosingPolicy="UNAVAILABLE" styleClass="main-tabs" VBox.vgrow="ALWAYS">
+
+                <Tab text="Пациенты">
+                    <BorderPane styleClass="tab-content">
+                        <top>
+                            <HBox spacing="12" alignment="CENTER_LEFT" styleClass="toolbar">
+                                <TextField fx:id="fullNameField" promptText="ФИО пациента" prefWidth="260"/>
+                                <TextField fx:id="birthDateField" promptText="Дата рождения: 1975-04-12" prefWidth="190"/>
+                                <TextField fx:id="diagnosisField" promptText="Диагноз" prefWidth="240"/>
+                                <TextField fx:id="phoneField" promptText="Телефон" prefWidth="180"/>
+                                <Button text="Добавить" onAction="#createPatient" styleClass="primary-button"/>
+                                <Button text="Очистить" onAction="#clearPatientForm" styleClass="secondary-button"/>
+                            </HBox>
+                        </top>
+
+                        <center>
+                            <TableView fx:id="patientsTable" styleClass="dark-table">
+                                <columns>
+                                    <TableColumn fx:id="patientIdColumn" text="ID" prefWidth="70"/>
+                                    <TableColumn fx:id="patientNameColumn" text="ФИО" prefWidth="260"/>
+                                    <TableColumn fx:id="patientBirthDateColumn" text="Дата рождения" prefWidth="150"/>
+                                    <TableColumn fx:id="patientDiagnosisColumn" text="Диагноз" prefWidth="260"/>
+                                    <TableColumn fx:id="patientPhoneColumn" text="Телефон" prefWidth="180"/>
+                                </columns>
+                            </TableView>
+                        </center>
+                    </BorderPane>
+                </Tab>
+
+                <Tab text="Показатели">
+                    <BorderPane styleClass="tab-content">
+                        <top>
+                            <VBox spacing="14" styleClass="form-card">
+                                <Label text="Добавление медицинских показателей" styleClass="section-title"/>
+
+                                <GridPane hgap="12" vgap="12">
+                                    <columnConstraints>
+                                        <ColumnConstraints prefWidth="220"/>
+                                        <ColumnConstraints prefWidth="220"/>
+                                        <ColumnConstraints prefWidth="220"/>
+                                    </columnConstraints>
+
+                                    <Label text="ID пациента" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="field-label"/>
+                                    <Label text="Верхнее давление" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="field-label"/>
+                                    <Label text="Нижнее давление" GridPane.rowIndex="0" GridPane.columnIndex="2" styleClass="field-label"/>
+
+                                    <TextField fx:id="measurementPatientIdField" promptText="Например: 1"
+                                               GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                                    <TextField fx:id="systolicPressureField" promptText="Например: 120"
+                                               GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                                    <TextField fx:id="diastolicPressureField" promptText="Например: 80"
+                                               GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+
+                                    <Label text="Пульс" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="field-label"/>
+                                    <Label text="Температура" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="field-label"/>
+                                    <Label text="Глюкоза" GridPane.rowIndex="2" GridPane.columnIndex="2" styleClass="field-label"/>
+
+                                    <TextField fx:id="pulseField" promptText="Например: 75"
+                                               GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                                    <TextField fx:id="temperatureField" promptText="Например: 36.6"
+                                               GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                                    <TextField fx:id="glucoseLevelField" promptText="Например: 5.2"
+                                               GridPane.rowIndex="3" GridPane.columnIndex="2"/>
+
+                                    <Label text="Сатурация" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="field-label"/>
+                                    <TextField fx:id="oxygenSaturationField" promptText="Например: 98"
+                                               GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+
+                                    <HBox spacing="10" GridPane.rowIndex="5" GridPane.columnIndex="1" GridPane.columnSpan="2">
+                                        <Button text="Сохранить показатели" onAction="#createMeasurement" styleClass="primary-button"/>
+                                        <Button text="Очистить форму" onAction="#clearMeasurementForm" styleClass="secondary-button"/>
+                                    </HBox>
+                                </GridPane>
+                            </VBox>
+                        </top>
+
+                        <center>
+                            <VBox spacing="10">
+                                <Label text="История измерений выбранного пациента" styleClass="section-title"/>
+                                <TableView fx:id="measurementsTable" styleClass="dark-table" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="measurementIdColumn" text="ID" prefWidth="70"/>
+                                        <TableColumn fx:id="measurementPatientColumn" text="Пациент" prefWidth="90"/>
+                                        <TableColumn fx:id="measurementPressureColumn" text="Давление" prefWidth="130"/>
+                                        <TableColumn fx:id="measurementPulseColumn" text="Пульс" prefWidth="100"/>
+                                        <TableColumn fx:id="measurementTemperatureColumn" text="Температура" prefWidth="130"/>
+                                        <TableColumn fx:id="measurementGlucoseColumn" text="Глюкоза" prefWidth="120"/>
+                                        <TableColumn fx:id="measurementOxygenColumn" text="Сатурация" prefWidth="120"/>
+                                        <TableColumn fx:id="measurementDateColumn" text="Дата" prefWidth="200"/>
+                                    </columns>
+                                </TableView>
+                            </VBox>
+                        </center>
+                    </BorderPane>
+                </Tab>
+
+                <Tab text="Предупреждения">
+                    <BorderPane styleClass="tab-content">
+                        <top>
+                            <HBox spacing="12" alignment="CENTER_LEFT" styleClass="toolbar">
+                                <Label text="Тревожные уведомления" styleClass="section-title"/>
+                                <Pane HBox.hgrow="ALWAYS"/>
+                                <Button text="Показать все" onAction="#loadAllAlerts" styleClass="secondary-button"/>
+                                <Button text="Только активные" onAction="#loadActiveAlerts" styleClass="secondary-button"/>
+                                <Button text="Отметить как обработанное" onAction="#resolveSelectedAlert" styleClass="primary-button"/>
+                            </HBox>
+                        </top>
+
+                        <center>
+                            <TableView fx:id="alertsTable" styleClass="dark-table">
+                                <columns>
+                                    <TableColumn fx:id="alertIdColumn" text="ID" prefWidth="70"/>
+                                    <TableColumn fx:id="alertPatientColumn" text="Пациент" prefWidth="230"/>
+                                    <TableColumn fx:id="alertMessageColumn" text="Сообщение" prefWidth="420"/>
+                                    <TableColumn fx:id="alertSeverityColumn" text="Критичность" prefWidth="130"/>
+                                    <TableColumn fx:id="alertStatusColumn" text="Статус" prefWidth="120"/>
+                                    <TableColumn fx:id="alertDateColumn" text="Дата" prefWidth="200"/>
+                                </columns>
+                            </TableView>
+                        </center>
+                    </BorderPane>
+                </Tab>
+
+            </TabPane>
+        </VBox>
+    </center>
+
+</BorderPane>

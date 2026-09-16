@@ -1,4 +1,4 @@
-package ru.patientmonitoring.dto;
+package com.patientmonitoring.dto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -1,10 +1,10 @@
-package ru.patientmonitoring.service;
+package com.patientmonitoring.service;
 
 import org.springframework.stereotype.Service;
-import ru.patientmonitoring.dto.PatientCreateRequest;
-import ru.patientmonitoring.dto.PatientResponse;
-import ru.patientmonitoring.entity.Patient;
-import ru.patientmonitoring.repository.PatientRepository;
+import com.patientmonitoring.dto.PatientCreateRequest;
+import com.patientmonitoring.dto.PatientResponse;
+import com.patientmonitoring.entity.Patient;
+import com.patientmonitoring.repository.PatientRepository;
 
 import java.util.List;
 

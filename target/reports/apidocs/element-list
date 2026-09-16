@@ -1,0 +1,10 @@
+com.patientmonitoring
+com.patientmonitoring.client
+com.patientmonitoring.client.api
+com.patientmonitoring.client.controller
+com.patientmonitoring.client.model
+com.patientmonitoring.controller
+com.patientmonitoring.dto
+com.patientmonitoring.entity
+com.patientmonitoring.repository
+com.patientmonitoring.service

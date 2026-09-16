@@ -1,7 +1,7 @@
-package ru.patientmonitoring.dto;
+package com.patientmonitoring.dto;
 
-import ru.patientmonitoring.entity.AlertSeverity;
-import ru.patientmonitoring.entity.AlertStatus;
+import com.patientmonitoring.entity.AlertSeverity;
+import com.patientmonitoring.entity.AlertStatus;
 
 import java.time.LocalDateTime;
 

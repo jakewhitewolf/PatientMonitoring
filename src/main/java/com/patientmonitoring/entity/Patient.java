@@ -1,4 +1,4 @@
-package ru.patientmonitoring.entity;
+package com.patientmonitoring.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;

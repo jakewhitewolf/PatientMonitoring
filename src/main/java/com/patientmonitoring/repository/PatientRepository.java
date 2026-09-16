@@ -1,7 +1,7 @@
-package ru.patientmonitoring.repository;
+package com.patientmonitoring.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.patientmonitoring.entity.Patient;
+import com.patientmonitoring.entity.Patient;
 
 public interface PatientRepository extends JpaRepository<Patient, Long> {
 }

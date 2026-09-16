@@ -1,8 +1,8 @@
-package ru.patientmonitoring.repository;
+package com.patientmonitoring.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.patientmonitoring.entity.Alert;
-import ru.patientmonitoring.entity.AlertStatus;
+import com.patientmonitoring.entity.Alert;
+import com.patientmonitoring.entity.AlertStatus;
 
 import java.util.List;
 

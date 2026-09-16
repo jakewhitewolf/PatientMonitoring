@@ -1,10 +1,10 @@
-package ru.patientmonitoring.controller;
+package com.patientmonitoring.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
-import ru.patientmonitoring.dto.PatientCreateRequest;
-import ru.patientmonitoring.dto.PatientResponse;
-import ru.patientmonitoring.service.PatientService;
+import com.patientmonitoring.dto.PatientCreateRequest;
+import com.patientmonitoring.dto.PatientResponse;
+import com.patientmonitoring.service.PatientService;
 
 import java.util.List;
 

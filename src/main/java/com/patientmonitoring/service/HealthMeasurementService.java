@@ -1,16 +1,16 @@
-package ru.patientmonitoring.service;
+package com.patientmonitoring.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.patientmonitoring.dto.HealthMeasurementCreateRequest;
-import ru.patientmonitoring.dto.HealthMeasurementResponse;
-import ru.patientmonitoring.entity.Alert;
-import ru.patientmonitoring.entity.AlertSeverity;
-import ru.patientmonitoring.entity.HealthMeasurement;
-import ru.patientmonitoring.entity.Patient;
-import ru.patientmonitoring.repository.AlertRepository;
-import ru.patientmonitoring.repository.HealthMeasurementRepository;
-import ru.patientmonitoring.repository.PatientRepository;
+import com.patientmonitoring.dto.HealthMeasurementCreateRequest;
+import com.patientmonitoring.dto.HealthMeasurementResponse;
+import com.patientmonitoring.entity.Alert;
+import com.patientmonitoring.entity.AlertSeverity;
+import com.patientmonitoring.entity.HealthMeasurement;
+import com.patientmonitoring.entity.Patient;
+import com.patientmonitoring.repository.AlertRepository;
+import com.patientmonitoring.repository.HealthMeasurementRepository;
+import com.patientmonitoring.repository.PatientRepository;
 
 import java.util.ArrayList;
 import java.util.List;

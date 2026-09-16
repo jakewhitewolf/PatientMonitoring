@@ -1,7 +1,7 @@
-package ru.patientmonitoring.repository;
+package com.patientmonitoring.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.patientmonitoring.entity.HealthMeasurement;
+import com.patientmonitoring.entity.HealthMeasurement;
 
 import java.util.List;
 

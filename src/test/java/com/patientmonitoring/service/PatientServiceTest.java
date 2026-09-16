@@ -1,14 +1,14 @@
-package ru.patientmonitoring.service;
+package com.patientmonitoring.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.patientmonitoring.dto.PatientCreateRequest;
-import ru.patientmonitoring.dto.PatientResponse;
-import ru.patientmonitoring.entity.Patient;
-import ru.patientmonitoring.repository.PatientRepository;
+import com.patientmonitoring.dto.PatientCreateRequest;
+import com.patientmonitoring.dto.PatientResponse;
+import com.patientmonitoring.entity.Patient;
+import com.patientmonitoring.repository.PatientRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

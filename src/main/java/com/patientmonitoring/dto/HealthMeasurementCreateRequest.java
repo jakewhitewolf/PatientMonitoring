@@ -1,4 +1,4 @@
-package ru.patientmonitoring.dto;
+package com.patientmonitoring.dto;
 
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;

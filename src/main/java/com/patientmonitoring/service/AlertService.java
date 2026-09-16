@@ -1,10 +1,10 @@
-package ru.patientmonitoring.service;
+package com.patientmonitoring.service;
 
 import org.springframework.stereotype.Service;
-import ru.patientmonitoring.dto.AlertResponse;
-import ru.patientmonitoring.entity.Alert;
-import ru.patientmonitoring.entity.AlertStatus;
-import ru.patientmonitoring.repository.AlertRepository;
+import com.patientmonitoring.dto.AlertResponse;
+import com.patientmonitoring.entity.Alert;
+import com.patientmonitoring.entity.AlertStatus;
+import com.patientmonitoring.repository.AlertRepository;
 
 import java.util.List;
 

@@ -1,8 +1,8 @@
-package ru.patientmonitoring.controller;
+package com.patientmonitoring.controller;
 
 import org.springframework.web.bind.annotation.*;
-import ru.patientmonitoring.dto.AlertResponse;
-import ru.patientmonitoring.service.AlertService;
+import com.patientmonitoring.dto.AlertResponse;
+import com.patientmonitoring.service.AlertService;
 
 import java.util.List;
 

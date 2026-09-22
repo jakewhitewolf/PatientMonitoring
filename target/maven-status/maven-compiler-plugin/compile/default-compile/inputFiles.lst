@@ -4,6 +4,7 @@ D:\java\kurs\src\main\java\com\patientmonitoring\client\model\AlertItem.java
 D:\java\kurs\src\main\java\com\patientmonitoring\client\model\MeasurementItem.java
 D:\java\kurs\src\main\java\com\patientmonitoring\client\model\PatientItem.java
 D:\java\kurs\src\main\java\com\patientmonitoring\client\PatientMonitoringClientApplication.java
+D:\java\kurs\src\main\java\com\patientmonitoring\config\MedicalThresholdProperties.java
 D:\java\kurs\src\main\java\com\patientmonitoring\controller\AlertController.java
 D:\java\kurs\src\main\java\com\patientmonitoring\controller\HealthMeasurementController.java
 D:\java\kurs\src\main\java\com\patientmonitoring\controller\PatientController.java
@@ -13,6 +14,7 @@ D:\java\kurs\src\main\java\com\patientmonitoring\dto\HealthMeasurementResponse.j
 D:\java\kurs\src\main\java\com\patientmonitoring\dto\PatientCreateRequest.java
 D:\java\kurs\src\main\java\com\patientmonitoring\dto\PatientResponse.java
 D:\java\kurs\src\main\java\com\patientmonitoring\entity\Alert.java
+D:\java\kurs\src\main\java\com\patientmonitoring\entity\AlertAction.java
 D:\java\kurs\src\main\java\com\patientmonitoring\entity\AlertSeverity.java
 D:\java\kurs\src\main\java\com\patientmonitoring\entity\AlertStatus.java
 D:\java\kurs\src\main\java\com\patientmonitoring\entity\HealthMeasurement.java

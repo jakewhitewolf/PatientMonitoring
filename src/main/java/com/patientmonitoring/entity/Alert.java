@@ -35,6 +35,9 @@ public class Alert {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
+    @Enumerated(EnumType.STRING)
+    private AlertAction action = AlertAction.NONE;
+
     public Alert() {
     }
 
@@ -111,5 +114,13 @@ public class Alert {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public AlertAction getAction() {
+        return action;
+    }
+
+    public void setAction(AlertAction action) {
+        this.action = action;
     }
 }

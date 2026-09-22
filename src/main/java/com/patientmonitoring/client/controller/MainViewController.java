@@ -120,6 +120,9 @@ public class MainViewController {
     @FXML
     private TableColumn<AlertItem, String> alertDateColumn;
 
+    @FXML
+    private Button actionButton;
+
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     @FXML
@@ -136,6 +139,11 @@ public class MainViewController {
         });
 
         refreshAllData();
+        alertsTable.getSelectionModel()
+                .selectedItemProperty()
+                .addListener((obs, oldAlert, newAlert) -> {
+                    updateActionButton(newAlert);
+                });
     }
 
     private void setupPatientsTable() {
@@ -166,6 +174,34 @@ public class MainViewController {
     }
 
     private void setupAlertsTable() {
+        alertsTable.setRowFactory(table -> new TableRow<AlertItem>() {
+            @Override
+            protected void updateItem(AlertItem alert, boolean empty) {
+                super.updateItem(alert, empty);
+
+                getStyleClass().removeAll(
+                        "alert-warning",
+                        "alert-critical",
+                        "alert-emergency",
+                        "alert-resolved"
+                );
+
+                if (empty || alert == null) {
+                    return;
+                }
+
+                if ("RESOLVED".equals(alert.status())) {
+                    getStyleClass().add("alert-resolved");
+                    return;
+                }
+
+                switch (alert.severity()) {
+                    case "WARNING" -> getStyleClass().add("alert-warning");
+                    case "CRITICAL" -> getStyleClass().add("alert-critical");
+                    case "EMERGENCY" -> getStyleClass().add("alert-emergency");
+                }
+            }
+        });
         alertIdColumn.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().id()));
         alertPatientColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().patientFullName()));
         alertMessageColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().message()));
@@ -312,6 +348,40 @@ public class MainViewController {
         }
     }
 
+    @FXML
+    private void handleRecommendedAction() {
+        AlertItem selected = alertsTable.getSelectionModel().getSelectedItem();
+
+        if (selected == null) {
+            return;
+        }
+
+        String text;
+
+        switch (selected.action()) {
+            case "CALL_DOCTOR" ->
+                    text = "Сформирован запрос на вызов врача для пациента "
+                            + selected.patientFullName();
+
+            case "CALL_AMBULANCE" ->
+                    text = "Сформирован экстренный запрос для пациента "
+                            + selected.patientFullName();
+
+            default -> {
+                return;
+            }
+        }
+
+        showInfo("Рекомендуемое действие", text);
+
+        try {
+            apiClient.resolveAlert(selected.id());
+            loadAllAlerts();
+        } catch (Exception e) {
+            showError("Ошибка", e.getMessage());
+        }
+    }
+
     private Double parseDouble(String value) {
         return Double.parseDouble(value.replace(",", "."));
     }
@@ -343,5 +413,29 @@ public class MainViewController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+    private void updateActionButton(AlertItem alert) {
+        if (alert == null || alert.action() == null) {
+            actionButton.setDisable(true);
+            actionButton.setText("Действие не требуется");
+            return;
+        }
+
+        switch (alert.action()) {
+            case "CALL_DOCTOR" -> {
+                actionButton.setDisable(false);
+                actionButton.setText("Вызвать врача");
+            }
+
+            case "CALL_AMBULANCE" -> {
+                actionButton.setDisable(false);
+                actionButton.setText("Вызвать скорую");
+            }
+
+            default -> {
+                actionButton.setDisable(true);
+                actionButton.setText("Действие не требуется");
+            }
+        }
     }
 }

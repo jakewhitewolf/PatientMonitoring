@@ -8,6 +8,7 @@ public record AlertItem(
         String message,
         String severity,
         String status,
+        String action,
         String createdAt
 ) {
 }

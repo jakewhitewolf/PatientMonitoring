@@ -1,5 +1,6 @@
 package com.patientmonitoring.dto;
 
+import com.patientmonitoring.entity.AlertAction;
 import com.patientmonitoring.entity.AlertSeverity;
 import com.patientmonitoring.entity.AlertStatus;
 
@@ -14,6 +15,7 @@ public class AlertResponse {
     private String message;
     private AlertSeverity severity;
     private AlertStatus status;
+    private AlertAction action;
     private LocalDateTime createdAt;
 
     public AlertResponse(Long id,
@@ -23,6 +25,7 @@ public class AlertResponse {
                          String message,
                          AlertSeverity severity,
                          AlertStatus status,
+                         AlertAction action,
                          LocalDateTime createdAt) {
         this.id = id;
         this.patientId = patientId;
@@ -31,6 +34,7 @@ public class AlertResponse {
         this.message = message;
         this.severity = severity;
         this.status = status;
+        this.action = action;
         this.createdAt = createdAt;
     }
 
@@ -60,6 +64,10 @@ public class AlertResponse {
 
     public AlertStatus getStatus() {
         return status;
+    }
+
+    public AlertAction getAction() {
+        return action;
     }
 
     public LocalDateTime getCreatedAt() {

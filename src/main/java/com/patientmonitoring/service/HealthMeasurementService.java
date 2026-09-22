@@ -1,13 +1,11 @@
 package com.patientmonitoring.service;
 
+import com.patientmonitoring.config.MedicalThresholdProperties;
+import com.patientmonitoring.entity.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.patientmonitoring.dto.HealthMeasurementCreateRequest;
 import com.patientmonitoring.dto.HealthMeasurementResponse;
-import com.patientmonitoring.entity.Alert;
-import com.patientmonitoring.entity.AlertSeverity;
-import com.patientmonitoring.entity.HealthMeasurement;
-import com.patientmonitoring.entity.Patient;
 import com.patientmonitoring.repository.AlertRepository;
 import com.patientmonitoring.repository.HealthMeasurementRepository;
 import com.patientmonitoring.repository.PatientRepository;
@@ -21,13 +19,16 @@ public class HealthMeasurementService {
     private final HealthMeasurementRepository healthMeasurementRepository;
     private final PatientRepository patientRepository;
     private final AlertRepository alertRepository;
+    private final MedicalThresholdProperties thresholdProperties;
 
     public HealthMeasurementService(HealthMeasurementRepository healthMeasurementRepository,
                                     PatientRepository patientRepository,
-                                    AlertRepository alertRepository) {
+                                    AlertRepository alertRepository,
+                                    MedicalThresholdProperties thresholdProperties) {
         this.healthMeasurementRepository = healthMeasurementRepository;
         this.patientRepository = patientRepository;
         this.alertRepository = alertRepository;
+        this.thresholdProperties = thresholdProperties;
     }
 
     @Transactional
@@ -61,57 +62,94 @@ public class HealthMeasurementService {
 
     private void createAlertIfNeeded(Patient patient, HealthMeasurement measurement) {
         List<String> problems = new ArrayList<>();
-        AlertSeverity severity = AlertSeverity.WARNING;
 
-        if (measurement.getSystolicPressure() > 160 || measurement.getSystolicPressure() < 80) {
-            problems.add("критическое отклонение верхнего давления");
-            severity = AlertSeverity.CRITICAL;
-        } else if (measurement.getSystolicPressure() > 140 || measurement.getSystolicPressure() < 90) {
-            problems.add("отклонение верхнего давления");
+        if (thresholdProperties.getSystolic().isOutside(measurement.getSystolicPressure())) {
+            problems.add("систолическое давление");
         }
 
-        if (measurement.getDiastolicPressure() > 100 || measurement.getDiastolicPressure() < 50) {
-            problems.add("критическое отклонение нижнего давления");
-            severity = AlertSeverity.CRITICAL;
-        } else if (measurement.getDiastolicPressure() > 90 || measurement.getDiastolicPressure() < 60) {
-            problems.add("отклонение нижнего давления");
+        if (thresholdProperties.getDiastolic().isOutside(measurement.getDiastolicPressure())) {
+            problems.add("диастолическое давление");
         }
 
-        if (measurement.getPulse() > 130 || measurement.getPulse() < 45) {
-            problems.add("критическое отклонение пульса");
-            severity = AlertSeverity.CRITICAL;
-        } else if (measurement.getPulse() > 100 || measurement.getPulse() < 55) {
-            problems.add("отклонение пульса");
+        if (thresholdProperties.getPulse().isOutside(measurement.getPulse())) {
+            problems.add("пульс");
         }
 
-        if (measurement.getTemperature() > 39.0 || measurement.getTemperature() < 35.0) {
-            problems.add("критическое отклонение температуры");
-            severity = AlertSeverity.CRITICAL;
-        } else if (measurement.getTemperature() > 37.5 || measurement.getTemperature() < 36.0) {
-            problems.add("отклонение температуры");
+        if (thresholdProperties.getTemperature().isOutside(measurement.getTemperature())) {
+            problems.add("температура");
         }
 
-        if (measurement.getGlucoseLevel() > 13.0 || measurement.getGlucoseLevel() < 3.0) {
-            problems.add("критическое отклонение уровня глюкозы");
-            severity = AlertSeverity.CRITICAL;
-        } else if (measurement.getGlucoseLevel() > 10.0 || measurement.getGlucoseLevel() < 3.9) {
-            problems.add("отклонение уровня глюкозы");
+        if (thresholdProperties.getGlucose().isOutside(measurement.getGlucoseLevel())) {
+            problems.add("уровень глюкозы");
         }
 
-        if (measurement.getOxygenSaturation() < 90) {
-            problems.add("критическое снижение сатурации");
-            severity = AlertSeverity.CRITICAL;
-        } else if (measurement.getOxygenSaturation() < 95) {
-            problems.add("снижение сатурации");
+        if (thresholdProperties.getOxygen().isOutside(measurement.getOxygenSaturation())) {
+            problems.add("сатурация");
         }
 
-        if (!problems.isEmpty()) {
-            String message = "У пациента " + patient.getFullName() + " обнаружены отклонения: "
-                    + String.join(", ", problems) + ".";
-
-            Alert alert = new Alert(patient, measurement, message, severity);
-            alertRepository.save(alert);
+        if (problems.isEmpty()) {
+            return;
         }
+
+        int problemCount = problems.size();
+
+        AlertSeverity severity = defineSeverity(problemCount);
+        AlertAction action = defineAction(problemCount);
+
+        Alert alert = new Alert();
+        alert.setPatient(patient);
+        alert.setMeasurement(measurement);
+        alert.setSeverity(severity);
+        alert.setStatus(AlertStatus.ACTIVE);
+        alert.setAction(action);
+        alert.setMessage(createAlertMessage(patient, problems, severity, action));
+
+        alertRepository.save(alert);
+    }
+
+    private AlertSeverity defineSeverity(int problemCount) {
+        if (problemCount >= 4) {
+            return AlertSeverity.EMERGENCY;
+        }
+
+        if (problemCount >= 2) {
+            return AlertSeverity.CRITICAL;
+        }
+
+        return AlertSeverity.WARNING;
+    }
+
+    private AlertAction defineAction(int problemCount) {
+        if (problemCount >= 4) {
+            return AlertAction.CALL_AMBULANCE;
+        }
+
+        if (problemCount >= 2) {
+            return AlertAction.CALL_DOCTOR;
+        }
+
+        return AlertAction.NONE;
+    }
+
+    private String createAlertMessage(
+            Patient patient,
+            List<String> problems,
+            AlertSeverity severity,
+            AlertAction action
+    ) {
+        String message = "У пациента " + patient.getFullName()
+                + " обнаружены отклонения: "
+                + String.join(", ", problems) + ".";
+
+        if (severity == AlertSeverity.CRITICAL) {
+            message += " Рекомендуется связаться с врачом.";
+        }
+
+        if (severity == AlertSeverity.EMERGENCY) {
+            message += " Требуется срочная медицинская помощь.";
+        }
+
+        return message;
     }
 
     private HealthMeasurementResponse toResponse(HealthMeasurement measurement) {

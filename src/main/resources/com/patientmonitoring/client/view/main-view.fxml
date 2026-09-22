@@ -154,6 +154,7 @@
                                 <Button text="Показать все" onAction="#loadAllAlerts" styleClass="secondary-button"/>
                                 <Button text="Только активные" onAction="#loadActiveAlerts" styleClass="secondary-button"/>
                                 <Button text="Отметить как обработанное" onAction="#resolveSelectedAlert" styleClass="primary-button"/>
+                                <Button fx:id="actionButton" text="Выполнить рекомендуемое действие" onAction="#handleRecommendedAction" disable="true"/>
                             </HBox>
                         </top>
 

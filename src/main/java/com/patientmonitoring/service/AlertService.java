@@ -51,6 +51,7 @@ public class AlertService {
                 alert.getMessage(),
                 alert.getSeverity(),
                 alert.getStatus(),
+                alert.getAction(),
                 alert.getCreatedAt()
         );
     }
